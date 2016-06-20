@@ -1,6 +1,6 @@
 package App::PasswdMgr;
 
-# Created on: 2016-06-19 10:06:46
+# Created on: 2016-06-17 06:58:25
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
@@ -10,18 +10,74 @@ use Moo;
 use warnings;
 use version;
 use Carp;
-use Scalar::Util;
-use List::Util;
-#use List::MoreUtils;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
+use Getopt::Alt;
+use Path::Tiny;
+use YAML::Syck qw/ Load Dump /;
+use Crypt::CBC;
+use Crypt::Blowfish;
+use Crypt::Cipher::Blowfish;
+use Digest::SHA qw/sha512_base64/;
+use IO::Prompt;
+use App::PasswdMgr::List;
 
-extends 'Some::Thing';
+our $VERSION     = version->new('0.0.1');
 
-our $VERSION = version->new('0.0.1');
+has [qw/cbc opt data/] => ( is => 'rw' );
 
+sub run {
+    my ($self) = @_;
 
+    my ($options, $cmd, $opt) = get_options(
+        {
+            name        => 'passwdmgr',
+            conf_prefix => '.',
+            helper      => 1,
+            default     => {
+                test   => 0,
+                config => "$ENV{HOME}/.passwdmgr",
+            },
+        },
+        [
+            'config|c=s',
+            'create',
+            'force',
+            'name|n=s',
+            'test|T!',
+        ],
+    );
 
+    @ARGV = ();
+    my $key = prompt( -p => 'Password: ', -e => '*' ) || die "No key!";
+    my $iv  = Crypt::CBC->random_bytes(8);
+    $self->cbc(
+        Crypt::CBC->new(
+            -cipher => 'Cipher::Blowfish',
+            -key    => $key,
+        )
+    );
+    $self->opt($options);
+
+    if ($options->create) {
+        $self->create;
+    }
+
+    $self->data( Load( $self->cbc->decrypt( scalar path($self->opt->config)->slurp )));
+
+    $self->data->show;
+
+    return;
+}
+
+sub create {
+    my ($self) = @_;
+
+    if ( -f $self->opt->config && $self->opt->force ) {
+        die "Won't try to replace existing file '" . $self->opt->config ."'!\n";
+    }
+
+    path($self->opt->config)->spew( scalar $self->cbc->encrypt( Dump(App::PasswdMgr::List->new) ) );
+}
 
 
 1;

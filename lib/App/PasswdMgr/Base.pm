@@ -1,44 +1,98 @@
-#!/usr/bin/perl
+package App::PasswdMgr::Base;
 
-# Created on: 2016-06-17 07:00:25
+# Created on: 2016-06-20 18:14:54
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
 # $Revision$, $Source$, $Date$
 
-use strict;
+use Moo;
 use warnings;
-use App::PasswdMgr;
+use version;
+use Carp;
+use Scalar::Util;
+use List::Util;
+#use List::MoreUtils;
+use Data::Dumper qw/Dumper/;
+use English qw/ -no_match_vars /;
+use IO::Prompt;
+use Term::Size::Any qw/chars/;
 
-App::PasswdMgr->new->run();
+our $VERSION = version->new('0.0.1');
 
-__DATA__
+has contents => (
+    is      => 'rw',
+    default => sub {{}},
+);
+has actions => (
+    is => 'ro',
+);
+
+sub show {
+    my ($self) = @_;
+
+    # clear the screen
+    my ($cols, $rows) = chars();
+    print ' ' x ($rows * $cols), "\n";
+
+    warn Dumper $self->actions;
+    my %menu = map { $self->actions->{$_}{description} => $_ }
+        keys %{ $self->actions };
+
+    for my $content (keys %{ $self->contents }) {
+        my $type = $self->types($content);
+        next if !$type;
+        $menu{"$type$content"} = $content;
+    }
+    $menu{"Quit"} = '_quit';
+
+    my $ans = prompt(
+        -p => "Select one :",
+        '-one_char',
+        -m => \%menu,
+    );
+
+    return if $ans eq '_quit';
+    my $method = exists $self->actions->{$ans} && $self->actions->{$ans}{method};
+
+    return $self->$method() if $method;
+
+    $self->contents->{$ans}->can('show')
+        ? $self->contents->{$ans}->show
+        : $self->edit($ans);
+
+    return $self->show;
+}
+
+
+1;
+
+__END__
 
 =head1 NAME
 
-bin/passwdmgr - <One-line description of commands purpose>
+App::PasswdMgr::Base - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to bin/passwdmgr version 0.0.1
+This documentation refers to App::PasswdMgr::Base version 0.0.1
+
 
 =head1 SYNOPSIS
 
-   bin/passwdmgr [option]
+   use App::PasswdMgr::Base;
 
- OPTIONS:
-  -o --other         other option
+   # Brief but working code example(s) here showing the most common usage(s)
+   # This section will be as far as many users bother reading, so make it as
+   # educational and exemplary as possible.
 
-  -v --verbose       Show more detailed option
-     --version       Prints the version information
-     --help          Prints this help information
-     --man           Prints the full documentation for bin/passwdmgr
 
 =head1 DESCRIPTION
 
 A full description of the module and its features.
 
 May include numerous subsections (i.e., =head2, =head3, etc.).
+
 
 =head1 SUBROUTINES/METHODS
 
@@ -53,6 +107,18 @@ Name the section accordingly.
 In an object-oriented module, this section should begin with a sentence (of the
 form "An object of this class represents ...") to give the reader a high-level
 context to help them understand the methods that are subsequently described.
+
+
+=head3 C<new ( $search, )>
+
+Param: C<$search> - type (detail) - description
+
+Return: App::PasswdMgr::Base -
+
+Description:
+
+=cut
+
 
 =head1 DIAGNOSTICS
 

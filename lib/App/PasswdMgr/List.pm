@@ -1,44 +1,106 @@
-#!/usr/bin/perl
+package App::PasswdMgr::List;
 
-# Created on: 2016-06-17 07:00:25
+# Created on: 2016-06-20 17:29:11
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
 # $Revision$, $Source$, $Date$
 
-use strict;
+use Moo;
 use warnings;
-use App::PasswdMgr;
+use version;
+use Carp;
+use Scalar::Util;
+use List::Util;
+#use List::MoreUtils;
+use Data::Dumper qw/Dumper/;
+use English qw/ -no_match_vars /;
+use IO::Prompt;
+use Term::Size::Any qw/chars/;
+use App::PasswdMgr::Password;
 
-App::PasswdMgr->new->run();
+extends 'App::PasswdMgr::Base';
 
-__DATA__
+our $VERSION = version->new('0.0.1');
+
+has '+actions' => (
+    is      => 'ro',
+    default => sub {{
+        _password => {
+            description => 'New password',
+            method      => 'new_password',
+        },
+        _group => {
+            description => 'New group',
+            method      => 'new_group',
+        },
+    }},
+);
+
+sub types {
+    my ($self, $content) = @_;
+    return ref $content eq __PACKAGE__ ? 'Group - ' : 'Display - ';
+}
+
+sub new_group {
+    my ($self) = @_;
+    my $name = prompt( -p => "New groups name: " );
+
+    if ( $name =~ /^_/ ) {
+        warn "Group names can't start with underscores!\n";
+        return $self->new_group;
+    }
+
+    $self->contents->{$name} = App::PasswdMgr::List->new;
+
+    return $self->contents->{$name}->show;
+}
+
+sub new_password {
+    my ($self) = @_;
+    my $name = prompt( -p => "New password's name: " );
+
+    if ( $name =~ /^_/ ) {
+        warn "Password names can't start with underscores!\n";
+        return $self->new_group;
+    }
+
+    $self->contents->{$name} = App::PasswdMgr::Password->new(
+        contents => { name => $name }
+    );
+    $self->contents->{$name}->show;
+
+    return $self->show;
+}
+
+1;
+
+__END__
 
 =head1 NAME
 
-bin/passwdmgr - <One-line description of commands purpose>
+App::PasswdMgr::List - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to bin/passwdmgr version 0.0.1
+This documentation refers to App::PasswdMgr::List version 0.0.1
+
 
 =head1 SYNOPSIS
 
-   bin/passwdmgr [option]
+   use App::PasswdMgr::List;
 
- OPTIONS:
-  -o --other         other option
+   # Brief but working code example(s) here showing the most common usage(s)
+   # This section will be as far as many users bother reading, so make it as
+   # educational and exemplary as possible.
 
-  -v --verbose       Show more detailed option
-     --version       Prints the version information
-     --help          Prints this help information
-     --man           Prints the full documentation for bin/passwdmgr
 
 =head1 DESCRIPTION
 
 A full description of the module and its features.
 
 May include numerous subsections (i.e., =head2, =head3, etc.).
+
 
 =head1 SUBROUTINES/METHODS
 
@@ -53,6 +115,18 @@ Name the section accordingly.
 In an object-oriented module, this section should begin with a sentence (of the
 form "An object of this class represents ...") to give the reader a high-level
 context to help them understand the methods that are subsequently described.
+
+
+=head3 C<new ( $search, )>
+
+Param: C<$search> - type (detail) - description
+
+Return: App::PasswdMgr::List -
+
+Description:
+
+=cut
+
 
 =head1 DIAGNOSTICS
 

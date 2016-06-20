@@ -1,44 +1,76 @@
-#!/usr/bin/perl
+package App::PasswdMgr::Password;
 
-# Created on: 2016-06-17 07:00:25
+# Created on: 2016-06-20 17:29:26
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
 # $Revision$, $Source$, $Date$
 
-use strict;
+use Moo;
 use warnings;
-use App::PasswdMgr;
+use version;
+use Carp;
+use Scalar::Util;
+use List::Util;
+#use List::MoreUtils;
+use Data::Dumper qw/Dumper/;
+use English qw/ -no_match_vars /;
 
-App::PasswdMgr->new->run();
+extends 'App::PasswdMgr::Base';
 
-__DATA__
+our $VERSION = version->new('0.0.1');
+
+has '+actions' => (
+    is      => 'ro',
+    default => sub {{
+        _copy_clipboard => {
+            description => 'Put password into clipboard',
+            method      => 'clipboard',
+        },
+        _add_param => {
+            description => 'Insert new parameter',
+            method      => 'new_parameter',
+        },
+    }},
+);
+
+sub types {
+    my ($self, $content) = @_;
+    return $content eq 'password' ? undef : 'Edit - ';
+}
+
+sub edit {
+    my ($self, $content) = @_;
+}
+
+1;
+
+__END__
 
 =head1 NAME
 
-bin/passwdmgr - <One-line description of commands purpose>
+App::PasswdMgr::Password - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to bin/passwdmgr version 0.0.1
+This documentation refers to App::PasswdMgr::Password version 0.0.1
+
 
 =head1 SYNOPSIS
 
-   bin/passwdmgr [option]
+   use App::PasswdMgr::Password;
 
- OPTIONS:
-  -o --other         other option
+   # Brief but working code example(s) here showing the most common usage(s)
+   # This section will be as far as many users bother reading, so make it as
+   # educational and exemplary as possible.
 
-  -v --verbose       Show more detailed option
-     --version       Prints the version information
-     --help          Prints this help information
-     --man           Prints the full documentation for bin/passwdmgr
 
 =head1 DESCRIPTION
 
 A full description of the module and its features.
 
 May include numerous subsections (i.e., =head2, =head3, etc.).
+
 
 =head1 SUBROUTINES/METHODS
 
@@ -53,6 +85,18 @@ Name the section accordingly.
 In an object-oriented module, this section should begin with a sentence (of the
 form "An object of this class represents ...") to give the reader a high-level
 context to help them understand the methods that are subsequently described.
+
+
+=head3 C<new ( $search, )>
+
+Param: C<$search> - type (detail) - description
+
+Return: App::PasswdMgr::Password -
+
+Description:
+
+=cut
+
 
 =head1 DIAGNOSTICS
 
