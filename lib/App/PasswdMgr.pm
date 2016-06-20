@@ -66,6 +66,8 @@ sub run {
 
     $self->data->show;
 
+    path($self->opt->config)->spew( scalar $self->cbc->encrypt( Dump($self->data) ) );
+
     return;
 }
 

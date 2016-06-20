@@ -39,7 +39,9 @@ has '+actions' => (
 
 sub types {
     my ($self, $content) = @_;
-    return ref $content eq __PACKAGE__ ? 'Group - ' : 'Display - ';
+    return $content eq 'name'                            ? undef
+        : ref $self->contents->{$content} eq __PACKAGE__ ? 'Group - '
+        :                                                  'Display - ';
 }
 
 sub new_group {
@@ -51,9 +53,13 @@ sub new_group {
         return $self->new_group;
     }
 
-    $self->contents->{$name} = App::PasswdMgr::List->new;
+    $self->contents->{$name} = App::PasswdMgr::List->new(
+        contents => { name => $name }
+    );
 
-    return $self->contents->{$name}->show;
+    $self->contents->{$name}->show;
+
+    return $self->show;
 }
 
 sub new_password {

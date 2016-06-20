@@ -35,7 +35,6 @@ sub show {
     my ($cols, $rows) = chars();
     print ' ' x ($rows * $cols), "\n";
 
-    warn Dumper $self->actions;
     my %menu = map { $self->actions->{$_}{description} => $_ }
         keys %{ $self->actions };
 
@@ -47,7 +46,7 @@ sub show {
     $menu{"Quit"} = '_quit';
 
     my $ans = prompt(
-        -p => "Select one :",
+        -p => $self->contents->{name} || "Select one :",
         '-one_char',
         -m => \%menu,
     );

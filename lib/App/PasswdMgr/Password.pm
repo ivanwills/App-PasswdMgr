@@ -31,6 +31,14 @@ has '+actions' => (
             description => 'Insert new parameter',
             method      => 'new_parameter',
         },
+        _password => {
+            description => 'Enter password',
+            method      => 'enter_password',
+        },
+        _view => {
+            description => 'View password',
+            method      => 'view_password',
+        },
     }},
 );
 
@@ -40,6 +48,21 @@ sub types {
 }
 
 sub edit {
+    my ($self, $content) = @_;
+}
+sub clipboard {
+    my ($self, $content) = @_;
+}
+
+sub new_parameter {
+    my ($self, $content) = @_;
+}
+
+sub enter_password {
+    my ($self) = @_;
+}
+
+sub view_password {
     my ($self, $content) = @_;
 }
 
