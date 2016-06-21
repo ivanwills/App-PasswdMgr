@@ -15,6 +15,8 @@ use List::Util;
 #use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
+use IO::Prompt;
+use Clipboard;
 
 extends 'App::PasswdMgr::Base';
 
@@ -26,18 +28,22 @@ has '+actions' => (
         _copy_clipboard => {
             description => 'Put password into clipboard',
             method      => 'clipboard',
+            short       => 'c',
         },
         _add_param => {
             description => 'Insert new parameter',
             method      => 'new_parameter',
+            short       => 'n',
         },
         _password => {
             description => 'Enter password',
             method      => 'enter_password',
+            short       => 'p',
         },
-        _view => {
-            description => 'View password',
-            method      => 'view_password',
+        _show => {
+            description => 'Show password',
+            method      => 'show_password',
+            short       => 's',
         },
     }},
 );
@@ -49,21 +55,45 @@ sub types {
 
 sub edit {
     my ($self, $content) = @_;
+
+    return $self->show;
 }
+
 sub clipboard {
     my ($self, $content) = @_;
+
+    Clipboard->copy( $self->contents->{password}[-1]{text} );
+
+    return $self->show;
 }
 
 sub new_parameter {
     my ($self, $content) = @_;
+
+    return $self->show;
 }
 
 sub enter_password {
     my ($self) = @_;
+
+    my $first = prompt( -p => 'Enter password: ', -e => '*' );
+
+    push @{ $self->contents->{password} }, {
+        text => $first,
+        date => time,
+    };
+
+    return $self->show;
 }
 
-sub view_password {
+sub show_password {
     my ($self, $content) = @_;
+
+    print $self->contents->{password}[-1]{text} . "\n";
+
+    prompt(-p => "Press the any key to continue", '-one_char');
+
+    return $self->show;
 }
 
 1;

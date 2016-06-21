@@ -33,15 +33,28 @@ sub show {
 
     # clear the screen
     my ($cols, $rows) = chars();
-    print ' ' x ($rows * $cols), "\n";
+    print ' ' x ($rows * $cols * 10), "\n";
 
+    my %actions = (
+        _quit => {
+            description => "Quit",
+            short       => 'q',
+        },
+        %{ $self->actions },
+    );
     my %menu = map { $self->actions->{$_}{description} => $_ }
         keys %{ $self->actions };
 
+    my $i = 0;
     for my $content (keys %{ $self->contents }) {
         my $type = $self->types($content);
         next if !$type;
-        $menu{"$type$content"} = $content;
+        my $suffix = $self->suffix($content);
+        $menu{"$type$content$suffix"} = $content;
+        $actions{$content} = {
+            description => "$content$suffix",
+            short       => $i++,
+        };
     }
     $menu{"Quit"} = '_quit';
 
@@ -51,7 +64,15 @@ sub show {
         -m => \%menu,
     );
 
-    return if $ans eq '_quit';
+    if ( $ans eq '_quit' ) {
+
+        # clear the screen
+        my ($cols, $rows) = chars();
+        print ' ' x ($rows * $cols * 10), "\n";
+
+        return;
+    }
+
     my $method = exists $self->actions->{$ans} && $self->actions->{$ans}{method};
 
     return $self->$method() if $method;
@@ -63,6 +84,7 @@ sub show {
     return $self->show;
 }
 
+sub suffix {''}
 
 1;
 

@@ -16,7 +16,6 @@ use List::Util;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use IO::Prompt;
-use Term::Size::Any qw/chars/;
 use App::PasswdMgr::Password;
 
 extends 'App::PasswdMgr::Base';
@@ -29,10 +28,12 @@ has '+actions' => (
         _password => {
             description => 'New password',
             method      => 'new_password',
+            short       => 'p',
         },
         _group => {
             description => 'New group',
             method      => 'new_group',
+            short       => 'g',
         },
     }},
 );
@@ -42,6 +43,13 @@ sub types {
     return $content eq 'name'                            ? undef
         : ref $self->contents->{$content} eq __PACKAGE__ ? 'Group - '
         :                                                  'Display - ';
+}
+
+sub suffix {
+    my ($self, $content) = @_;
+    return $content eq 'name'                            ? undef
+        : ref $self->contents->{$content} eq __PACKAGE__ ? ''
+        :                                                  ' (password)';
 }
 
 sub new_group {
