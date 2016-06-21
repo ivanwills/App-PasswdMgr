@@ -64,6 +64,11 @@ sub run {
 
     $self->data( Load( $self->cbc->decrypt( scalar path($self->opt->config)->slurp )));
 
+    if ( !ref $self->data || ! $self->data->can('show') ) {
+        warn "Bad password!\n";
+        return;
+    }
+
     $self->data->show;
 
     path($self->opt->config)->spew( scalar $self->cbc->encrypt( Dump($self->data) ) );
@@ -78,7 +83,11 @@ sub create {
         die "Won't try to replace existing file '" . $self->opt->config ."'!\n";
     }
 
-    path($self->opt->config)->spew( scalar $self->cbc->encrypt( Dump(App::PasswdMgr::List->new) ) );
+    path($self->opt->config)->spew(
+        scalar $self->cbc->encrypt(
+            Dump(App::PasswdMgr::List->new(contents => { name => 'Base Menu' }))
+        )
+    );
 }
 
 
