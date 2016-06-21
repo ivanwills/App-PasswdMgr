@@ -24,64 +24,77 @@ has contents => (
     is      => 'rw',
     default => sub {{}},
 );
-has actions => (
-    is => 'ro',
-);
 
 sub show {
-    my ($self) = @_;
+    my ($self, $retry) = @_;
 
-    # clear the screen
-    my ($cols, $rows) = chars();
-    print ' ' x ($rows * $cols * 10), "\n";
+    if ( ! $retry ) {
+        $self->clear;
+    }
 
     my %actions = (
-        _quit => {
+        q => {
             description => "Quit",
-            short       => 'q',
         },
         %{ $self->actions },
     );
-    my %menu = map { $self->actions->{$_}{description} => $_ }
-        keys %{ $self->actions };
 
     my $i = 0;
-    for my $content (keys %{ $self->contents }) {
+    for my $content (sort {lc $a cmp lc $b} keys %{ $self->contents }) {
         my $type = $self->types($content);
         next if !$type;
         my $suffix = $self->suffix($content);
-        $menu{"$type$content$suffix"} = $content;
-        $actions{$content} = {
+        $actions{$i++} = {
             description => "$content$suffix",
-            short       => $i++,
+            content     => $content,
         };
     }
-    $menu{"Quit"} = '_quit';
 
-    my $ans = prompt(
-        -p => $self->contents->{name} || "Select one :",
-        '-one_char',
-        -m => \%menu,
+    my $menu = $self->menu($self->contents->{name}, %actions);
+
+    my $ans = '' . prompt(
+        -p => '> ',
+        ( $i <= 10 ? '-one_char' : () ),
     );
+    $self->clear;
 
-    if ( $ans eq '_quit' ) {
+    return if $ans eq '' || $ans eq 'q';
 
-        # clear the screen
-        my ($cols, $rows) = chars();
-        print ' ' x ($rows * $cols * 10), "\n";
-
-        return;
-    }
-
-    my $method = exists $self->actions->{$ans} && $self->actions->{$ans}{method};
+    my $method = exists $actions{$ans} && $actions{$ans}{method};
 
     return $self->$method() if $method;
 
-    $self->contents->{$ans}->can('show')
-        ? $self->contents->{$ans}->show
-        : $self->edit($ans);
+    if ( ! exists $actions{$ans} ) {
+        my @actions = sort keys %actions;
+        print "\nPlease choose one of " . ( join ', ', @actions[0..$#actions-1] ) . " or $actions[-1]!\n";
+        $retry++;
+        return if $retry > 10;
+        return $self->show($retry);
+    }
+
+    $self->contents->{$actions{$ans}{content}}->can('show')
+        ? $self->contents->{$actions{$ans}{content}}->show
+        : $self->edit($actions{$ans}{content});
 
     return $self->show;
+}
+
+sub clear {
+    my ($cols, $rows) = chars();
+    print ' ' x ($rows * $cols * 10), "\n";
+}
+
+sub menu {
+    my ($self, $name, %menu) = @_;
+    my @ordered = sort {$a =~ /^\d+$/ && $b =~ /^\d+$/ ? $a <=> $b : $a cmp $b} keys %menu;
+
+    print $name || "Select one :", "\n";
+
+    for my $item (@ordered) {
+        printf "\t%2s  %s\n", $item, $menu{$item}{description};
+    }
+
+    return;
 }
 
 sub suffix {''}

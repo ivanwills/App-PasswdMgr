@@ -22,31 +22,26 @@ extends 'App::PasswdMgr::Base';
 
 our $VERSION = version->new('0.0.1');
 
-has '+actions' => (
-    is      => 'ro',
-    default => sub {{
-        _copy_clipboard => {
+sub actions {
+    {
+        c => {
             description => 'Put password into clipboard',
             method      => 'clipboard',
-            short       => 'c',
         },
-        _add_param => {
+        n => {
             description => 'Insert new parameter',
             method      => 'new_parameter',
-            short       => 'n',
         },
-        _password => {
+        p => {
             description => 'Enter password',
             method      => 'enter_password',
-            short       => 'p',
         },
-        _show => {
+        s => {
             description => 'Show password',
             method      => 'show_password',
-            short       => 's',
         },
-    }},
-);
+    }
+};
 
 sub types {
     my ($self, $content) = @_;

@@ -22,21 +22,28 @@ extends 'App::PasswdMgr::Base';
 
 our $VERSION = version->new('0.0.1');
 
-has '+actions' => (
-    is      => 'ro',
-    default => sub {{
-        _password => {
+has parent => ( is => 'rw' );
+
+sub actions {
+    my ($self) = @_;
+    my $actions = {
+        p => {
             description => 'New password',
             method      => 'new_password',
-            short       => 'p',
         },
-        _group => {
+        g => {
             description => 'New group',
             method      => 'new_group',
-            short       => 'g',
         },
-    }},
-);
+    };
+    if ( $self->parent ) {
+        $actions->{d} = {
+            description => 'Delete this group (and ' . (keys %{$self->contents}) . ' items)',
+            method      => 'delete',
+        };
+    }
+    return $actions;
+}
 
 sub types {
     my ($self, $content) = @_;
@@ -54,14 +61,23 @@ sub suffix {
 
 sub new_group {
     my ($self) = @_;
-    my $name = prompt( -p => "New groups name: " );
+    my $name = '' . prompt( -p => "New groups name: " );
 
-    if ( $name =~ /^_/ ) {
+    if ( ! $name ) {
+        return $self->show;
+    }
+    elsif ( $name =~ /^_/ ) {
         warn "Group names can't start with underscores!\n";
         return $self->new_group;
     }
+    elsif ( exists $self->contents->{$name} ) {
+        $self->clear;
+        print "'$name' already exists!\n";
+        return $self->show(1);
+    }
 
     $self->contents->{$name} = App::PasswdMgr::List->new(
+        parent   => $self,
         contents => { name => $name }
     );
 
@@ -78,6 +94,11 @@ sub new_password {
         warn "Password names can't start with underscores!\n";
         return $self->new_group;
     }
+    elsif ( exists $self->contents->{$name} ) {
+        $self->clear;
+        print "'$name' already exists!\n";
+        return $self->show(1);
+    }
 
     $self->contents->{$name} = App::PasswdMgr::Password->new(
         contents => { name => $name }
@@ -85,6 +106,19 @@ sub new_password {
     $self->contents->{$name}->show;
 
     return $self->show;
+}
+
+sub delete {
+    my ($self) = @_;
+
+    if ( keys %{ $self->contents } ) {
+        my $delete = prompt( -p => 'Really delete? [yn] ', '-yes' );
+        return $self->show if ! $delete;
+    }
+
+    delete $self->parent->contents->{$self->{contents}{name}};
+
+    return;
 }
 
 1;
