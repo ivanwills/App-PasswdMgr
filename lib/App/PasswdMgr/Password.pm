@@ -40,6 +40,10 @@ sub actions {
             description => 'Show password',
             method      => 'show_password',
         },
+        r => {
+            description => 'Rename group',
+            method      => 'rename',
+        },
     }
 }
 

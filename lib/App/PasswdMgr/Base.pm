@@ -24,9 +24,8 @@ has contents => (
     is      => 'rw',
     default => sub {{}},
 );
-has name => (
-    is => 'rw',
-);
+has parent => ( is => 'rw' );
+has name   => ( is => 'rw' );
 
 sub show {
     my ($self, $retry) = @_;
@@ -101,6 +100,23 @@ sub menu {
 }
 
 sub suffix {''}
+
+sub rename {
+    my ($self) = @_;
+
+    my $new_name = prompt('New name: ');
+    if ( $self->parent->contents->{$new_name} ) {
+        print "A '$new_name' already exists!\n";
+    }
+    else {
+        my $old_name = $self->name;
+        $self->name($new_name);
+        $self->parent->contents->{$new_name} = $self;
+        delete $self->parent->contents->{$old_name};
+    }
+
+    return $self->show;
+}
 
 1;
 

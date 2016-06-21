@@ -22,8 +22,6 @@ extends 'App::PasswdMgr::Base';
 
 our $VERSION = version->new('0.0.1');
 
-has parent => ( is => 'rw' );
-
 sub actions {
     my ($self) = @_;
     my $actions = {
@@ -40,6 +38,10 @@ sub actions {
         $actions->{d} = {
             description => 'Delete this group (and ' . (keys %{$self->contents}) . ' items)',
             method      => 'delete',
+        };
+        $actions->{r} = {
+            description => 'Rename group',
+            method      => 'rename',
         };
     }
     return $actions;
