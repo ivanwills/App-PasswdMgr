@@ -77,8 +77,8 @@ sub new_group {
     }
 
     $self->contents->{$name} = App::PasswdMgr::List->new(
-        parent   => $self,
-        contents => { name => $name }
+        parent => $self,
+        name   => $name,
     );
 
     $self->contents->{$name}->show;
@@ -101,7 +101,8 @@ sub new_password {
     }
 
     $self->contents->{$name} = App::PasswdMgr::Password->new(
-        contents => { name => $name }
+        parent => $self,
+        name   => $name,
     );
     $self->contents->{$name}->show;
 
@@ -116,7 +117,7 @@ sub delete {
         return $self->show if ! $delete;
     }
 
-    delete $self->parent->contents->{$self->{contents}{name}};
+    delete $self->parent->contents->{$self->name};
 
     return;
 }

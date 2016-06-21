@@ -41,7 +41,7 @@ sub actions {
             method      => 'show_password',
         },
     }
-};
+}
 
 sub types {
     my ($self, $content) = @_;
@@ -64,6 +64,11 @@ sub clipboard {
 
 sub new_parameter {
     my ($self, $content) = @_;
+
+    my $name  = prompt("Parameters' name: ");
+    my $value = prompt("Value: ");
+
+    $self->contents->{$name} = $value;
 
     return $self->show;
 }

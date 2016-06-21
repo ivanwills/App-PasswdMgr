@@ -24,6 +24,9 @@ has contents => (
     is      => 'rw',
     default => sub {{}},
 );
+has name => (
+    is => 'rw',
+);
 
 sub show {
     my ($self, $retry) = @_;
@@ -50,7 +53,7 @@ sub show {
         };
     }
 
-    my $menu = $self->menu($self->contents->{name}, %actions);
+    my $menu = $self->menu($self->name, %actions);
 
     my $ans = '' . prompt(
         -p => '> ',
