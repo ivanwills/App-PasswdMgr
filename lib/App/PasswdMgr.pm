@@ -39,11 +39,9 @@ sub run {
             },
         },
         [
-            'passwords|c=s',
+            'passwords|p=s',
             'create',
             'force',
-            'name|n=s',
-            'test|T!',
         ],
     );
 
@@ -122,11 +120,18 @@ This documentation refers to App::PasswdMgr version 0.0.1
 
 =head1 SYNOPSIS
 
-   use App::PasswdMgr;
+    passwdmgr [options]
+    passwdmgr (-p|--passwords) password-file
 
-   # Brief but working code example(s) here showing the most common usage(s)
-   # This section will be as far as many users bother reading, so make it as
-   # educational and exemplary as possible.
+  OPTIONS:
+    -p --passwords[=]file
+                    File with stored passwords (Default ~/.passwdmgr)
+    -c --create     Create new passwords file
+    -f --force      Force the overwritting of existing passwords file
+    -v --verbose    Show verbose information
+       --version    Show passwdmrg version
+       --help       Show this help
+       --man        Show full help documentation
 
 =head1 DESCRIPTION
 
