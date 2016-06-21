@@ -35,11 +35,11 @@ sub run {
             helper      => 1,
             default     => {
                 test   => 0,
-                config => "$ENV{HOME}/.passwdmgr",
+                passwords => "$ENV{HOME}/.passwdmgr",
             },
         },
         [
-            'config|c=s',
+            'passwords|c=s',
             'create',
             'force',
             'name|n=s',
@@ -47,22 +47,15 @@ sub run {
         ],
     );
 
-    @ARGV = ();
-    my $key = prompt( -p => 'Password: ', -e => '*' ) || die "No key!";
-    my $iv  = Crypt::CBC->random_bytes(8);
-    $self->cbc(
-        Crypt::CBC->new(
-            -cipher => 'Cipher::Blowfish',
-            -key    => $key,
-        )
-    );
     $self->opt($options);
-
-    if ($options->create) {
+    if ( $options->create || !-f $self->opt->passwords ) {
         $self->create;
     }
+    else {
+        $self->build_cbc();
+    }
 
-    $self->data( Load( $self->cbc->decrypt( scalar path($self->opt->config)->slurp )));
+    $self->data( Load( $self->cbc->decrypt( scalar path($self->opt->passwords)->slurp )));
 
     if ( !ref $self->data || ! $self->data->can('show') ) {
         warn "Bad password!\n";
@@ -71,7 +64,29 @@ sub run {
 
     $self->data->show;
 
-    path($self->opt->config)->spew( scalar $self->cbc->encrypt( Dump($self->data) ) );
+    path($self->opt->passwords)->spew( scalar $self->cbc->encrypt( Dump($self->data) ) );
+
+    return;
+}
+
+sub build_cbc {
+    my ($self, $confirm) = @_;
+
+    my $key = prompt( -p => 'Password: ', -e => '*' ) || die "No key!";
+    my $iv  = Crypt::CBC->random_bytes(8);
+
+    if ($confirm) {
+        my $confirm = prompt( -p => 'Re-enter password: ', -e => '*' );
+
+        die "Passwords don't match!\n" if $key ne $confirm;
+    }
+
+    $self->cbc(
+        Crypt::CBC->new(
+            -cipher => 'Cipher::Blowfish',
+            -key    => $key,
+        )
+    );
 
     return;
 }
@@ -79,11 +94,13 @@ sub run {
 sub create {
     my ($self) = @_;
 
-    if ( -f $self->opt->config && $self->opt->force ) {
-        die "Won't try to replace existing file '" . $self->opt->config ."'!\n";
+    if ( -f $self->opt->passwords && $self->opt->force ) {
+        die "Won't try to replace existing file '" . $self->opt->passwords ."'!\n";
     }
 
-    path($self->opt->config)->spew(
+    $self->build_cbc(1);
+
+    path($self->opt->passwords)->spew(
         scalar $self->cbc->encrypt(
             Dump(App::PasswdMgr::List->new(contents => { name => 'Base Menu' }))
         )
