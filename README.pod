@@ -1,17 +1,15 @@
-App-PasswdMgr
+=begin html
 
-The README is used to introduce the module and provide instructions on
-how to install the module, any machine dependencies it may have (for
-example C compilers and installed libraries) and any other information
-that should be provided before the module is installed.
+<a href="https://travis-ci.org/ivanwills/App-PasswdMgr"><img src="https://travis-ci.org/ivanwills/App-PasswdMgr.png" alt="App-PasswdMgr"></a>
+<a href="https://coveralls.io/r/ivanwills/App-PasswdMgr?branch=master"><img src="https://coveralls.io/repos/ivanwills/App-PasswdMgr/badge.svg?branch=master" alt="Coverage Status" /></a>
 
-A README file is required for CPAN modules since CPAN extracts the README
-file from a module distribution so that people browsing the archive
-can use it to get an idea of the module's uses. It is usually a good idea
-to provide version information here so that people can decide whether
-fixes for the module are worth downloading.
+=head1 App-PasswdMgr
 
-INSTALLATION
+This package provides a command line tool to manage passwords in a (untested)
+secure fashion. It is inspired by the programs like KeyPassX but is managed
+on the command line.
+
+=head1 INSTALLATION
 
 To install this module, run the following commands:
 
@@ -20,7 +18,7 @@ To install this module, run the following commands:
     ./Build test
     ./Build install
 
-SUPPORT AND DOCUMENTATION
+=head1 SUPPORT AND DOCUMENTATION
 
 After installing, you can find documentation for this module with the
 perldoc command.
@@ -44,7 +42,7 @@ You can also look for information at:
     Source Code
         git://github.com/ivanwills/App-PasswdMgr.git
 
-COPYRIGHT AND LICENCE
+=head1 COPYRIGHT AND LICENCE
 
 Copyright (C) 2016 Ivan Wills
 
@@ -54,3 +52,4 @@ by the Free Software Foundation; or the Artistic License.
 
 See http://dev.perl.org/licenses/ for more information.
 
+=cut
