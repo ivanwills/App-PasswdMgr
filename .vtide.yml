@@ -1,12 +1,16 @@
 ---
-count: 4
+count: 6
 default:
   restart: 0
   wait: 1
 editor:
   files:
-    eg:
-      - some-file.eg
+    base:
+      - lib/App/PasswdMgr.pm
+      - lib/App/PasswdMgr/Base.pm
+    actions:
+      - lib/App/PasswdMgr/List.pm
+      - lib/App/PasswdMgr/Password.pm
 name: passwdmgr
 terminals:
   1a:
@@ -17,7 +21,9 @@ terminals:
       - lib
       - bin
   2:
-    edit: lib
+    edit: base
   3:
+    edit: actions
+  4:
     restart: 1
     edit: bin
