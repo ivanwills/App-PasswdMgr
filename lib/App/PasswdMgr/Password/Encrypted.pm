@@ -1,6 +1,6 @@
-package App::PasswdMgr::Password::Param;
+package App::PasswdMgr::Password::Encrypted;
 
-# Created on: 2016-06-22 07:19:55
+# Created on: 2016-06-23 06:55:30
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
@@ -50,23 +50,22 @@ sub types {
     return $content eq 'password' ? undef : 'Edit - ';
 }
 
-
 1;
 
 __END__
 
 =head1 NAME
 
-App::PasswdMgr::Password::Param - <One-line description of module's purpose>
+App::PasswdMgr::Password::Encrypted - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to App::PasswdMgr::Password::Param version 0.0.1
+This documentation refers to App::PasswdMgr::Password::Encrypted version 0.0.1
 
 
 =head1 SYNOPSIS
 
-   use App::PasswdMgr::Password::Param;
+   use App::PasswdMgr::Password::Encrypted;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
@@ -99,7 +98,7 @@ context to help them understand the methods that are subsequently described.
 
 Param: C<$search> - type (detail) - description
 
-Return: App::PasswdMgr::Password::Param -
+Return: App::PasswdMgr::Password::Encrypted -
 
 Description:
 
