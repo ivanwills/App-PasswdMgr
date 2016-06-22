@@ -1,6 +1,6 @@
-package App::PasswdMgr::Password;
+package App::PasswdMgr::Password::Param;
 
-# Created on: 2016-06-20 17:29:26
+# Created on: 2016-06-22 07:19:55
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
@@ -15,91 +15,14 @@ use List::Util;
 #use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
-use IO::Prompt;
-use Clipboard;
-use App::PasswdMgr::Password::Param;
 
 extends 'App::PasswdMgr::Base';
 
 our $VERSION = version->new('0.0.1');
 
-sub actions {
-    {
-        c => {
-            description => 'Put password into clipboard',
-            method      => 'clipboard',
-        },
-        n => {
-            description => 'Insert new parameter',
-            method      => 'new_parameter',
-        },
-        p => {
-            description => 'Enter password',
-            method      => 'enter_password',
-        },
-        s => {
-            description => 'Show password',
-            method      => 'show_password',
-        },
-        r => {
-            description => 'Rename group',
-            method      => 'rename',
-        },
-    }
-}
 
-sub types {
-    my ($self, $content) = @_;
-    return $content eq 'password' ? undef : 'Edit - ';
-}
 
-sub edit {
-    my ($self, $content) = @_;
 
-    return $self->show;
-}
-
-sub clipboard {
-    my ($self, $content) = @_;
-
-    Clipboard->copy( $self->contents->{password}[-1]{text} );
-
-    return $self->show;
-}
-
-sub new_parameter {
-    my ($self, $content) = @_;
-
-    my $name  = prompt("Parameters' name: ");
-    my $value = prompt("Value: ");
-
-    $self->contents->{$name} = $value;
-
-    return $self->show;
-}
-
-sub enter_password {
-    my ($self) = @_;
-
-    my $first = prompt( -p => 'Enter password: ', -e => '*' );
-
-    push @{ $self->contents->{password} }, {
-        text => $first,
-        date => time,
-    };
-
-    return $self->show;
-}
-
-sub show_password {
-    my ($self, $content) = @_;
-
-    print $self->contents->{password}[-1]{text} . "\n";
-
-    prompt(-p => "Press the any key to continue", '-one_char');
-
-    return $self->show;
-}
 
 1;
 
@@ -107,16 +30,16 @@ __END__
 
 =head1 NAME
 
-App::PasswdMgr::Password - <One-line description of module's purpose>
+App::PasswdMgr::Password::Param - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to App::PasswdMgr::Password version 0.0.1
+This documentation refers to App::PasswdMgr::Password::Param version 0.0.1
 
 
 =head1 SYNOPSIS
 
-   use App::PasswdMgr::Password;
+   use App::PasswdMgr::Password::Param;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
@@ -149,7 +72,7 @@ context to help them understand the methods that are subsequently described.
 
 Param: C<$search> - type (detail) - description
 
-Return: App::PasswdMgr::Password -
+Return: App::PasswdMgr::Password::Param -
 
 Description:
 
