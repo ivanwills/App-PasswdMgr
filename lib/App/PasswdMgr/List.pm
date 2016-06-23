@@ -63,52 +63,12 @@ sub suffix {
 
 sub new_group {
     my ($self) = @_;
-    my $name = '' . prompt( -p => "New groups name: " );
-
-    if ( ! $name ) {
-        return $self->show;
-    }
-    elsif ( $name =~ /^_/ ) {
-        warn "Group names can't start with underscores!\n";
-        return $self->new_group;
-    }
-    elsif ( exists $self->contents->{$name} ) {
-        $self->clear;
-        print "'$name' already exists!\n";
-        return $self->show(1);
-    }
-
-    $self->contents->{$name} = App::PasswdMgr::List->new(
-        parent => $self,
-        name   => $name,
-    );
-
-    $self->contents->{$name}->show;
-
-    return $self->show;
+    return $self->_new( "New groups name: ", 'App::PasswdMgr::List' );
 }
 
 sub new_password {
     my ($self) = @_;
-    my $name = prompt( -p => "New password's name: " );
-
-    if ( $name =~ /^_/ ) {
-        warn "Password names can't start with underscores!\n";
-        return $self->new_group;
-    }
-    elsif ( exists $self->contents->{$name} ) {
-        $self->clear;
-        print "'$name' already exists!\n";
-        return $self->show(1);
-    }
-
-    $self->contents->{$name} = App::PasswdMgr::Password->new(
-        parent => $self,
-        name   => $name,
-    );
-    $self->contents->{$name}->show;
-
-    return $self->show;
+    return $self->_new( "New password's name: ", 'App::PasswdMgr::Password' );
 }
 
 sub delete {

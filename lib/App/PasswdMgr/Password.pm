@@ -18,6 +18,7 @@ use English qw/ -no_match_vars /;
 use IO::Prompt;
 use Clipboard;
 use App::PasswdMgr::Password::Param;
+use App::PasswdMgr::Password::Encrypted;
 
 extends 'App::PasswdMgr::Base';
 

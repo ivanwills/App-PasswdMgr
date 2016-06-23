@@ -118,6 +118,33 @@ sub rename {
     return $self->show;
 }
 
+sub _new {
+    my ($self, $text, $type) = @_;
+    my $name = '' . prompt( -p => $text );
+
+    if ( ! $name ) {
+        return $self->show(1);
+    }
+    elsif ( $name =~ /^_/ ) {
+        print "Can't start with underscores!\n";
+        return $self->show(1);
+    }
+    elsif ( exists $self->contents->{$name} ) {
+        $self->clear;
+        print "'$name' already exists!\n";
+        return $self->show(1);
+    }
+
+    $self->contents->{$name} = $type->new(
+        parent => $self,
+        name   => $name,
+    );
+
+    $self->contents->{$name}->show;
+
+    return $self->show;
+}
+
 1;
 
 __END__
