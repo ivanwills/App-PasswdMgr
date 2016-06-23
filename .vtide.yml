@@ -11,6 +11,8 @@ editor:
     actions:
       - lib/App/PasswdMgr/List.pm
       - lib/App/PasswdMgr/Password.pm
+    params:
+      - lib/App/PasswdMgr/Password/*.pm
 name: passwdmgr
 terminals:
   1a:
@@ -25,5 +27,7 @@ terminals:
   3:
     edit: actions
   4:
+    edit: params
+  5:
     restart: 1
     edit: bin
