@@ -45,11 +45,6 @@ sub actions {
     }
 }
 
-sub types {
-    my ($self, $content) = @_;
-    return $content eq 'password' ? undef : 'Edit - ';
-}
-
 sub edit {
     my ($self, $content) = @_;
 

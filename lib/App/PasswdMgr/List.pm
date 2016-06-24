@@ -47,13 +47,6 @@ sub actions {
     return $actions;
 }
 
-sub types {
-    my ($self, $content) = @_;
-    return $content eq 'name'                            ? undef
-        : ref $self->contents->{$content} eq __PACKAGE__ ? 'Group - '
-        :                                                  'Display - ';
-}
-
 sub suffix {
     my ($self, $content) = @_;
     return $content eq 'name'                            ? undef

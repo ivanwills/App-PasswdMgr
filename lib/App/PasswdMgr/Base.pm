@@ -43,8 +43,6 @@ sub show {
 
     my $i = 0;
     for my $content (sort {lc $a cmp lc $b} keys %{ $self->contents }) {
-        my $type = $self->types($content);
-        next if !$type;
         my $suffix = $self->suffix($content);
         $actions{$i++} = {
             description => "$content$suffix",
