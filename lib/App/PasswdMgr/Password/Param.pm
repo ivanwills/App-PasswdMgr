@@ -20,6 +20,8 @@ extends 'App::PasswdMgr::Base';
 
 our $VERSION = version->new('0.0.1');
 
+has [qw/value type/] => ( is => 'rw' );
+
 sub actions {
     {
         c => {
@@ -45,11 +47,40 @@ sub actions {
     }
 }
 
-sub types {
-    my ($self, $content) = @_;
-    return $content eq 'password' ? undef : 'Edit - ';
+sub set {
+    my ($self) = @_;
+
+    my$name;
+    my $type = $self->question(
+        -p => 'Parameter type: ',
+        -m => {
+            Username => 'username',
+            Key      => 'key',
+            Other    => 'other',
+        },
+    );
+
+    if ( $type eq 'other' ) {
+        $name = $self->question('Name: ');
+    }
+    else {
+        $name = ucfirst $type;
+    }
+
+    my $value = $self->question('Value: ');
+
+    $self->name($name);
+    $self->type($type);
+    $self->value($value);
+
+    return $self;
 }
 
+sub suffix {
+    my ($self) = @_;
+
+    return '(' . $self->value . ')';
+}
 
 1;
 

@@ -105,7 +105,7 @@ sub create {
 
     path($self->opt->passwords)->spew(
         scalar $self->cbc->encrypt(
-            Dump(App::PasswdMgr::List->new(contents => { name => 'Base Menu' }))
+            Dump(App::PasswdMgr::List->new(contents => {}, name => 'Base Menu' ))
         )
     );
 }

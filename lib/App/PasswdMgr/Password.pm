@@ -59,14 +59,23 @@ sub clipboard {
     return $self->show;
 }
 
+before show => sub {
+    my ($self) = @_;
+
+    $self->new_parameter(1) if !%{ $self->contents };
+
+    return;
+};
+
 sub new_parameter {
-    my ($self, $content) = @_;
+    my ($self, $no_show) = @_;
 
-    my $name  = $self->question("Parameters' name: ");
-    my $value = $self->question("Value: ");
+    my $param = App::PasswdMgr::Password::Param->new(
+        parent => $self,
+    )->set;
+    $self->contents->{$param->name} = $param;
 
-    $self->contents->{$name} = $value;
-
+    return if $no_show;
     return $self->show;
 }
 
