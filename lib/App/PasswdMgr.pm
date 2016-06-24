@@ -40,6 +40,7 @@ sub run {
         },
         [
             'passwords|p=s',
+            'dump|d',
             'create',
             'force',
         ],
@@ -58,6 +59,10 @@ sub run {
     if ( !ref $self->data || ! $self->data->can('show') ) {
         warn "Bad password!\n";
         return;
+    }
+    if ( $options->dump ) {
+        print Dump($self->data);
+        exit 1;
     }
 
     $self->data->show;
