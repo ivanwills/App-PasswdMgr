@@ -50,7 +50,7 @@ sub show {
         };
     }
 
-    my $menu = $self->menu($self->name, %actions);
+    my $menu = $self->menu(%actions);
 
     my $ans = $self->question(
         -p => '> ',
@@ -85,16 +85,24 @@ sub clear {
 }
 
 sub menu {
-    my ($self, $name, %menu) = @_;
+    my ($self, %menu) = @_;
     my @ordered = sort {$a =~ /^\d+$/ && $b =~ /^\d+$/ ? $a <=> $b : $a cmp $b} keys %menu;
 
-    print $name || "Select one :", "\n";
+    print $self->name && $self->full_name || "Select one :", "\n";
 
     for my $item (@ordered) {
         printf "\t%2s  %s\n", $item, $menu{$item}{description};
     }
 
     return;
+}
+
+sub full_name {
+    my ($self) = @_;
+
+    return $self->name if ! $self->parent;
+
+    return $self->parent->full_name . ' / ' . $self->name;
 }
 
 sub suffix {''}
