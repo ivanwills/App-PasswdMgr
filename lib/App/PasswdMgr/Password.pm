@@ -10,13 +10,9 @@ use Moo;
 use warnings;
 use version;
 use Carp;
-use Scalar::Util;
-use List::Util;
-#use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
-use IO::Prompt;
-use Clipboard;
+use Clipboard qw//;
 use App::PasswdMgr::Password::Param;
 use App::PasswdMgr::Password::Encrypted;
 
@@ -71,8 +67,8 @@ sub clipboard {
 sub new_parameter {
     my ($self, $content) = @_;
 
-    my $name  = prompt("Parameters' name: ");
-    my $value = prompt("Value: ");
+    my $name  = $self->question("Parameters' name: ");
+    my $value = $self->question("Value: ");
 
     $self->contents->{$name} = $value;
 
@@ -82,7 +78,7 @@ sub new_parameter {
 sub enter_password {
     my ($self) = @_;
 
-    my $first = prompt( -p => 'Enter password: ', -e => '*' );
+    my $first = $self->question( -p => 'Enter password: ', -e => '*' );
 
     push @{ $self->contents->{password} }, {
         text => $first,
@@ -97,7 +93,7 @@ sub show_password {
 
     print $self->contents->{password}[-1]{text} . "\n";
 
-    prompt(-p => "Press the any key to continue", '-one_char');
+    $self->question(-p => "Press the any key to continue", '-one_char');
 
     return $self->show;
 }

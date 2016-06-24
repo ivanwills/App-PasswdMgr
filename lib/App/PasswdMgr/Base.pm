@@ -54,7 +54,7 @@ sub show {
 
     my $menu = $self->menu($self->name, %actions);
 
-    my $ans = '' . prompt(
+    my $ans = $self->question(
         -p => '> ',
         ( $i <= 10 ? '-one_char' : () ),
     );
@@ -104,7 +104,7 @@ sub suffix {''}
 sub rename {
     my ($self) = @_;
 
-    my $new_name = prompt('New name: ');
+    my $new_name = $self->question('New name: ');
     if ( $self->parent->contents->{$new_name} ) {
         print "A '$new_name' already exists!\n";
     }
@@ -120,7 +120,7 @@ sub rename {
 
 sub _new {
     my ($self, $text, $type) = @_;
-    my $name = '' . prompt( -p => $text );
+    my $name = $self->question( -p => $text );
 
     if ( ! $name ) {
         return $self->show(1);
@@ -143,6 +143,11 @@ sub _new {
     $self->contents->{$name}->show;
 
     return $self->show;
+}
+
+sub question {
+    my ($self, @args) = @_;
+    return '' . prompt(@args);
 }
 
 1;
