@@ -110,15 +110,18 @@ sub suffix {''}
 sub rename {
     my ($self) = @_;
 
+    print $self->full_name . "\n";
     my $new_name = $self->question('New name: ');
-    if ( $self->parent->contents->{$new_name} ) {
-        print "A '$new_name' already exists!\n";
-    }
-    else {
-        my $old_name = $self->name;
-        $self->name($new_name);
-        $self->parent->contents->{$new_name} = $self;
-        delete $self->parent->contents->{$old_name};
+    if ( $new_name ) {
+        if ( $self->parent->contents->{$new_name} ) {
+            print "A '$new_name' already exists!\n";
+        }
+        else {
+            my $old_name = $self->name;
+            $self->name($new_name);
+            $self->parent->contents->{$new_name} = $self;
+            delete $self->parent->contents->{$old_name};
+        }
     }
 
     return $self->show;
