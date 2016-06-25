@@ -12,7 +12,6 @@ use version;
 use Carp;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
-use Clipboard qw//;
 use App::PasswdMgr::Password::Param;
 use App::PasswdMgr::Password::Encrypted;
 
@@ -63,7 +62,7 @@ sub edit {
 sub clipboard {
     my ($self, $content) = @_;
 
-    Clipboard->copy( $self->contents->{password}[-1]{text} );
+    $self->contents->{password}->clipboard(1);
 
     return $self->show;
 }
@@ -77,28 +76,30 @@ before show => sub {
 };
 
 sub new_parameter {
-    my ($self, $no_show) = @_;
+    my ($self, $hide) = @_;
 
     my $param = App::PasswdMgr::Password::Param->new(
         parent => $self,
     )->set;
     $self->contents->{$param->name} = $param;
 
-    return if $no_show;
-    return $self->show;
+    return $hide || $self->show;
 }
 
 sub enter_password {
-    my ($self) = @_;
+    my ($self, $hide) = @_;
 
-    my $first = $self->question( -p => 'Enter password: ', -e => '*' );
+    if ( $self->contents->{password} ) {
+        $self->contents->{password}->set;
+    }
+    else {
+        $self->contents->{password} = App::PasswdMgr::Password::Param->new(
+            parent => $self,
+            name   => 'password',
+        )->set;
+    }
 
-    push @{ $self->contents->{password} }, {
-        text => $first,
-        date => time,
-    };
-
-    return $self->show;
+    return $hide || $self->show;
 }
 
 sub show_password {
