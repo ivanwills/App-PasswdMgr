@@ -16,9 +16,22 @@ use List::Util;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 
-extends 'App::PasswdMgr::Base';
+extends 'App::PasswdMgr::Password::Param';
 
 our $VERSION = version->new('0.0.1');
+
+has '+types' => (
+    default => sub {{
+        'Auto generate'  => 'generate',
+        'Enter password' => 'hand',
+    }},
+);
+has '+value_question' => (
+    default => sub {return {
+        -p => 'Password: ',
+        -e => '*',
+    }},
+);
 
 sub actions {
     {
@@ -43,6 +56,15 @@ sub actions {
             method      => 'rename',
         },
     }
+}
+
+sub suffix {
+    return '(********)';
+}
+
+sub enter_value {
+    my ($self) = @_;
+    return $self->type eq 'hand';
 }
 
 1;
