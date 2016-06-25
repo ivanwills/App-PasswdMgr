@@ -10,22 +10,33 @@ use Moo;
 use warnings;
 use version;
 use Carp;
-use Scalar::Util;
-use List::Util;
-#use List::MoreUtils;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
+use Clipboard qw//;
 
 extends 'App::PasswdMgr::Base';
 
 our $VERSION = version->new('0.0.1');
 
 has [qw/value type/] => ( is => 'rw' );
+has types => (
+    is      => 'rw',
+    default => sub {{
+        Username => 'username',
+        Key      => 'key',
+        Other    => 'other',
+    }},
+);
+has value_question => (
+    is      => 'rw',
+    default => sub {return {
+        -p => 'Value: ',
+    }},
+);
 
 sub actions {
     {
         c => {
-            description => 'Put password into clipboard',
+            description => 'Copy into clipboard',
             method      => 'clipboard',
         },
         n => {
@@ -53,11 +64,7 @@ sub set {
     my$name;
     my $type = $self->question(
         -p => 'Parameter type: ',
-        -m => {
-            Username => 'username',
-            Key      => 'key',
-            Other    => 'other',
-        },
+        -m => $self->types,
     );
 
     if ( $type eq 'other' ) {
@@ -66,20 +73,31 @@ sub set {
     else {
         $name = ucfirst $type;
     }
-
-    my $value = $self->question('Value: ');
-
-    $self->name($name);
+    $self->name($name) if !$self->name;
     $self->type($type);
-    $self->value($value);
+
+    if ($self->enter_value) {
+        my $value = $self->question(%{ $self->value_question });
+        $self->value($value);
+    }
 
     return $self;
 }
+
+sub enter_value {1}
 
 sub suffix {
     my ($self) = @_;
 
     return '(' . $self->value . ')';
+}
+
+sub clipboard {
+    my ($self, $hide) = @_;
+
+    Clipboard->copy( $self->value );
+
+    return $hide || $self->show;
 }
 
 1;
