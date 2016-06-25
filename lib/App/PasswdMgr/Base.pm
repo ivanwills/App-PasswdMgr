@@ -184,7 +184,21 @@ This documentation refers to App::PasswdMgr::Base version 0.0.1
 
 =head1 SUBROUTINES/METHODS
 
-=head3 C<new ( $search, )>
+=head2 C<show ()>
+
+=head2 C<clear ()>
+
+=head2 C<menu ()>
+
+=head2 C<full_name ()>
+
+=head2 C<suffix ()>
+
+=head2 C<rename ()>
+
+=head2 C<_new ()>
+
+=head2 C<question ()>
 
 =head1 DIAGNOSTICS
 

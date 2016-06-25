@@ -15,7 +15,6 @@ use Getopt::Alt;
 use Path::Tiny;
 use YAML::Syck qw/ Load Dump /;
 use Crypt::CBC;
-use Crypt::Blowfish;
 use Crypt::Cipher::Blowfish;
 use Digest::SHA qw/sha512_base64/;
 use IO::Prompt;
@@ -142,7 +141,35 @@ This documentation refers to App::PasswdMgr version 0.0.1
 
 =head1 SUBROUTINES/METHODS
 
-=head3 C<new ( $search, )>
+=head2 C<run ()>
+
+Runs the whole thing
+
+=head2 C<build_cbc ( $confirm )>
+
+Set up the decryption object
+
+=head2 C<create ()>
+
+Create a new passwordmgr file.
+
+=head1 ATTRIBUTES
+
+=over 4
+
+=item cbc
+
+The L<Crypt::CBC> object for encrypting the data.
+
+=item opt
+
+Command line optons.
+
+=item data
+
+The internal decrypted passwords.
+
+=back
 
 =head1 DIAGNOSTICS
 
