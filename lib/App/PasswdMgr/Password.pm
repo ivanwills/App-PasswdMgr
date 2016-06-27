@@ -143,29 +143,33 @@ May include numerous subsections (i.e., =head2, =head3, etc.).
 
 =head1 SUBROUTINES/METHODS
 
-A separate section listing the public components of the module's interface.
+=head2 C<actions ()>
 
-These normally consist of either subroutines that may be exported, or methods
-that may be called on objects belonging to the classes that the module
-provides.
+Returns a hash ref of available actions for the current password.
 
-Name the section accordingly.
+=head2 C<edit ()>
 
-In an object-oriented module, this section should begin with a sentence (of the
-form "An object of this class represents ...") to give the reader a high-level
-context to help them understand the methods that are subsequently described.
+Change the name of the password
 
+=head2 C<clipboard ()>
 
-=head3 C<new ( $search, )>
+Copy the password to the clipboard.
 
-Param: C<$search> - type (detail) - description
+=head2 C<before: show ()>
 
-Return: App::PasswdMgr::Password -
+First time show is called this will get the user to fill out details.
 
-Description:
+=head2 C<new_parameter ()>
 
-=cut
+Create a new parameter (L<App::PasswdMgr::Password::Param>) for the password
 
+=head2 C<enter_password ()>
+
+Add/change the stored password
+
+=head2 C<show_password ()>
+
+Show the password unencrypted.
 
 =head1 DIAGNOSTICS
 

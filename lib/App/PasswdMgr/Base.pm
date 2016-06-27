@@ -200,6 +200,24 @@ This documentation refers to App::PasswdMgr::Base version 0.0.1
 
 =head2 C<question ()>
 
+=head1 ATTRIBUTES
+
+=over 4
+
+=item contents
+
+Stores the item's data
+
+=item parent
+
+A reference to the parent item
+
+=item name
+
+The name of the item
+
+=back
+
 =head1 DIAGNOSTICS
 
 =head1 CONFIGURATION AND ENVIRONMENT

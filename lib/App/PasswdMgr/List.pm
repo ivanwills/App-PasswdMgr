@@ -83,12 +83,11 @@ __END__
 
 =head1 NAME
 
-App::PasswdMgr::List - <One-line description of module's purpose>
+App::PasswdMgr::List - Stores a list of PasswdMgr items
 
 =head1 VERSION
 
 This documentation refers to App::PasswdMgr::List version 0.0.1
-
 
 =head1 SYNOPSIS
 
@@ -108,29 +107,26 @@ May include numerous subsections (i.e., =head2, =head3, etc.).
 
 =head1 SUBROUTINES/METHODS
 
-A separate section listing the public components of the module's interface.
+=head2 C<actions ()>
 
-These normally consist of either subroutines that may be exported, or methods
-that may be called on objects belonging to the classes that the module
-provides.
+Returns a hash ref of available actions for the current list.
 
-Name the section accordingly.
+=head2 C<suffix ( $content )>
 
-In an object-oriented module, this section should begin with a sentence (of the
-form "An object of this class represents ...") to give the reader a high-level
-context to help them understand the methods that are subsequently described.
+Returns the suffix '(password)' if the item is a L<App::PasswdMgr::Password>
+item.
 
+=head2 C<new_group ()>
 
-=head3 C<new ( $search, )>
+Creates new group L<App::PasswordMgr::List> of list items.
 
-Param: C<$search> - type (detail) - description
+=head2 C<new_password ()>
 
-Return: App::PasswdMgr::List -
+Creates a new password item
 
-Description:
+=head2 C<delete ()>
 
-=cut
-
+Delets the current group from the parent list.
 
 =head1 DIAGNOSTICS
 
