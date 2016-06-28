@@ -105,7 +105,7 @@ sub full_name {
 
     return $self->name if ! $self->parent;
 
-    return $self->parent->full_name . ' / ' . $self->name;
+    return $self->parent->full_name . ' / ' . $self->name . $self->parent->suffix($self->name);
 }
 
 sub suffix {''}
