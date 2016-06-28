@@ -79,7 +79,6 @@ App::PasswdMgr::Password::Encrypted - <One-line description of module's purpose>
 
 This documentation refers to App::PasswdMgr::Password::Encrypted version 0.0.1
 
-
 =head1 SYNOPSIS
 
    use App::PasswdMgr::Password::Encrypted;
@@ -98,29 +97,31 @@ May include numerous subsections (i.e., =head2, =head3, etc.).
 
 =head1 SUBROUTINES/METHODS
 
-A separate section listing the public components of the module's interface.
+=head2 C<actions ()>
 
-These normally consist of either subroutines that may be exported, or methods
-that may be called on objects belonging to the classes that the module
-provides.
+Returns a hash ref of available actions
 
-Name the section accordingly.
+=head2 C<suffix ()>
 
-In an object-oriented module, this section should begin with a sentence (of the
-form "An object of this class represents ...") to give the reader a high-level
-context to help them understand the methods that are subsequently described.
+Adds a '(*****)' to passwords
 
+=head2 C<enter_value ()>
 
-=head3 C<new ( $search, )>
+Returns true if the password is to be a user entered value
 
-Param: C<$search> - type (detail) - description
+=head1 ATTRIBUTES
 
-Return: App::PasswdMgr::Password::Encrypted -
+=over 4
 
-Description:
+=item types
 
-=cut
+Returns the menu of password types
 
+=item value_question
+
+Returns the parameters for asking to enter a password
+
+=back
 
 =head1 DIAGNOSTICS
 

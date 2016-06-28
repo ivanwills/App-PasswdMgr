@@ -112,7 +112,6 @@ App::PasswdMgr::Password::Param - <One-line description of module's purpose>
 
 This documentation refers to App::PasswdMgr::Password::Param version 0.0.1
 
-
 =head1 SYNOPSIS
 
    use App::PasswdMgr::Password::Param;
@@ -131,29 +130,47 @@ May include numerous subsections (i.e., =head2, =head3, etc.).
 
 =head1 SUBROUTINES/METHODS
 
-A separate section listing the public components of the module's interface.
+=head2 C<actions ()>
 
-These normally consist of either subroutines that may be exported, or methods
-that may be called on objects belonging to the classes that the module
-provides.
+Returns a hash ref of available actions
 
-Name the section accordingly.
+=head2 C<suffix ()>
 
-In an object-oriented module, this section should begin with a sentence (of the
-form "An object of this class represents ...") to give the reader a high-level
-context to help them understand the methods that are subsequently described.
+Adds the value when displaying the parameter.
 
+=head2 C<enter_value ()>
 
-=head3 C<new ( $search, )>
+Returns true if the password is to be a user entered value
 
-Param: C<$search> - type (detail) - description
+=head2 C<clipboard ()>
 
-Return: App::PasswdMgr::Password::Param -
+Copy's the parameters value to the system clipboard.
 
-Description:
+=head2 C<set ()>
 
-=cut
+This method is used to allow the user to set/update the parameter
 
+=head1 ATTRIBUTES
+
+=over 4
+
+=item types
+
+Returns the menu of password types
+
+=item type
+
+Stores the type of parameter
+
+=item value
+
+Stores the value of the parameter
+
+=item value_question
+
+Returns the parameters for asking to enter a password
+
+=back
 
 =head1 DIAGNOSTICS
 
