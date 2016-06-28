@@ -51,6 +51,7 @@ sub show {
     }
 
     my $menu = $self->menu(%actions);
+    print $menu;
 
     my $ans = $self->question(
         -p => '> ',
@@ -90,11 +91,12 @@ sub menu {
 
     print $self->name && $self->full_name || "Select one :", "\n";
 
+    my $menu = '';
     for my $item (@ordered) {
-        printf "\t%2s  %s\n", $item, $menu{$item}{description};
+        $menu .= sprintf "\t%2s  %s\n", $item, $menu{$item}{description};
     }
 
-    return;
+    return $menu;
 }
 
 sub full_name {
