@@ -17,6 +17,7 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use IO::Prompt;
 use Term::Size::Any qw/chars/;
+use Term::Screen;
 
 our $VERSION = version->new('0.0.1');
 
@@ -82,7 +83,7 @@ sub show {
 
 sub clear {
     my ($cols, $rows) = chars();
-    print ' ' x ($rows * $cols * 10), "\n";
+    Term::Screen->new->at(0,0)->puts(' ' x ( $rows * $cols ));
 }
 
 sub menu {
