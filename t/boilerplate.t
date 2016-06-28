@@ -58,5 +58,11 @@ subtest 'Changes' => sub {
     );
 };
 
+module_boilerplate_ok('bin/passwdmgr');
 module_boilerplate_ok('lib/App/PasswdMgr.pm');
+module_boilerplate_ok('lib/App/PasswdMgr/Base.pm');
+module_boilerplate_ok('lib/App/PasswdMgr/List.pm');
+module_boilerplate_ok('lib/App/PasswdMgr/Password.pm');
+module_boilerplate_ok('lib/App/PasswdMgr/Password/Param.pm');
+module_boilerplate_ok('lib/App/PasswdMgr/Password/Encrypted.pm');
 done_testing();
