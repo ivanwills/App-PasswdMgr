@@ -174,7 +174,6 @@ App::PasswdMgr::Base - Base class for object stored by App::PasswdMgr
 
 This documentation refers to App::PasswdMgr::Base version 0.0.1
 
-
 =head1 SYNOPSIS
 
    use App::PasswdMgr::Base;
