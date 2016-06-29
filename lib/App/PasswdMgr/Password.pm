@@ -113,7 +113,7 @@ sub enter_password {
 sub show_password {
     my ($self, $content) = @_;
 
-    print $self->contents->{password}[-1]{text} . "\n";
+    print $self->full_name . ":\n" . $self->contents->{password}->value . "\n";
 
     $self->question(-p => "Press the any key to continue", '-one_char');
 

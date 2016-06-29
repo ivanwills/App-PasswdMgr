@@ -70,6 +70,16 @@ sub enter_value {
     return $self->type eq 'hand';
 }
 
+sub show_password {
+    my ($self) = @_;
+
+    print $self->full_name . ":\n" . $self->value . "\n";
+
+    $self->question(-p => "Press the any key to continue", '-one_char');
+
+    return $self->show;
+}
+
 1;
 
 __END__
