@@ -43,21 +43,13 @@ sub actions {
             description => 'Copy into clipboard',
             method      => 'clipboard',
         },
-        n => {
-            description => 'Insert new parameter',
-            method      => 'new_parameter',
-        },
-        p => {
-            description => 'Enter password',
-            method      => 'enter_password',
-        },
-        s => {
-            description => 'Show password',
-            method      => 'show_password',
+        e => {
+            description => 'Edit value',
+            method      => 'edit',
         },
         r => {
-            description => 'Rename group',
-            method      => 'rename',
+            description => 'Reset value',
+            method      => 'set',
         },
         d => {
             description => 'Delete',
@@ -85,12 +77,7 @@ sub set {
     $self->name($name) if !$self->name;
     $self->type($type);
 
-    if ($self->enter_value) {
-        my $value = $self->question(%{ $self->value_question });
-        $self->value($value);
-    }
-
-    return $self;
+    return $self->edit;
 }
 
 sub enter_value {1}
@@ -107,6 +94,17 @@ sub clipboard {
     Clipboard->copy( $self->value );
 
     return $hide || $self->show;
+}
+
+sub edit {
+    my ($self) = @_;
+
+    if ($self->enter_value) {
+        my $value = $self->question(%{ $self->value_question });
+        $self->value($value);
+    }
+
+    return $self;
 }
 
 1;

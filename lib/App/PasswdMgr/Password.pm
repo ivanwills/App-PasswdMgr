@@ -57,6 +57,11 @@ sub actions {
     return $actions;
 }
 
+sub suffix {
+    my ($self, $content) = @_;
+    return ref $self->contents->{$content} ? ' ' . $self->contents->{$content}->suffix : '';
+}
+
 sub edit {
     my ($self, $content) = @_;
 

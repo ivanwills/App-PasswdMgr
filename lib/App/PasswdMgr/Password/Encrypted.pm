@@ -62,7 +62,8 @@ sub actions {
 }
 
 sub suffix {
-    return '(********)';
+    my ($self) = @_;
+    return '(' . ( '*' x (length $self->value) ) . ')';
 }
 
 sub enter_value {
