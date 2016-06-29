@@ -23,6 +23,7 @@ has types => (
     default => sub {{
         Username => 'username',
         Key      => 'key',
+        Number   => 'number',
         Other    => 'other',
     }},
 );
