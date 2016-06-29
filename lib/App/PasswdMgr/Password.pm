@@ -75,6 +75,7 @@ before show => sub {
     my ($self) = @_;
 
     $self->new_parameter(1) if !%{ $self->contents };
+    $self->enter_password(1) if !%{ $self->contents };
 
     return;
 };
@@ -85,7 +86,10 @@ sub new_parameter {
     my $param = App::PasswdMgr::Password::Param->new(
         parent => $self,
     )->set;
-    $self->contents->{$param->name} = $param;
+
+    if ( $param->value ne '' ) {
+        $self->contents->{$param->name} = $param;
+    }
 
     return $hide || $self->show;
 }
@@ -97,7 +101,7 @@ sub enter_password {
         $self->contents->{password}->set;
     }
     else {
-        $self->contents->{password} = App::PasswdMgr::Password::Param->new(
+        $self->contents->{password} = App::PasswdMgr::Password::Encrypted->new(
             parent => $self,
             name   => 'password',
         )->set;

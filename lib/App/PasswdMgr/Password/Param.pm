@@ -26,6 +26,10 @@ has types => (
         Other    => 'other',
     }},
 );
+has type_question => (
+    is      => 'rw',
+    default => 'Parameter type: ',
+);
 has value_question => (
     is      => 'rw',
     default => sub {return {
@@ -67,8 +71,9 @@ sub set {
 
     my$name;
     my $type = $self->question(
-        -p => 'Parameter type: ',
+        -p => $self->type_question,
         -m => $self->types,
+        '-one_char',
     );
 
     if ( $type eq 'other' ) {

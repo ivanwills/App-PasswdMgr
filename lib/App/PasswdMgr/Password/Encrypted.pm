@@ -26,6 +26,9 @@ has '+types' => (
         'Enter password' => 'hand',
     }},
 );
+has '+type_question' => (
+    default => 'Password type: ',
+);
 has '+value_question' => (
     default => sub {return {
         -p => 'Password: ',
