@@ -10,12 +10,7 @@ use Moo;
 use warnings;
 use version;
 use Carp;
-use Scalar::Util;
-use List::Util;
-#use List::MoreUtils;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
-use IO::Prompt;
 use App::PasswdMgr::Password;
 
 extends 'App::PasswdMgr::Base';
