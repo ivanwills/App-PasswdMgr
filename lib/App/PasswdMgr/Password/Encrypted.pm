@@ -22,8 +22,14 @@ our $VERSION = version->new('0.0.1');
 
 has '+types' => (
     default => sub {{
-        'Auto generate'  => 'generate',
-        'Enter password' => 'hand',
+        generate => {
+            label => 'Auto generate',
+            type  => 'generate',
+        },
+        hand => {
+            label => 'Enter password',
+            type  => 'hand',
+        },
     }},
 );
 has '+type_question' => (

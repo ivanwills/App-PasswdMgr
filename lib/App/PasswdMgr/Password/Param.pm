@@ -21,10 +21,26 @@ has [qw/value type/] => ( is => 'rw' );
 has types => (
     is      => 'rw',
     default => sub {{
-        Username => 'username',
-        Key      => 'key',
-        Number   => 'number',
-        Other    => 'other',
+        username => {
+            label => 'Username',
+            type  => 'username',
+        },
+        key => {
+            label => 'Key',
+            type  => 'key',
+        },
+        number => {
+            label    => 'Number',
+            type     => 'number',
+            error    => "Not a valid number, please reenter\n",
+            validate => sub {
+                $_ =~ /^\d+$/;
+            },
+        },
+        other => {
+            label => 'Other',
+            type  => 'other',
+        },
     }},
 );
 has type_question => (
@@ -65,7 +81,7 @@ sub set {
     my$name;
     my $type = $self->question(
         -p => $self->type_question,
-        -m => $self->types,
+        -m => { map { $self->types->{$_}{label} => $_ } keys %{ $self->types } },
         '-one_char',
     );
 
@@ -102,6 +118,13 @@ sub edit {
 
     if ($self->enter_value) {
         my $value = $self->question(%{ $self->value_question });
+        if ( $self->types->{ $self->{type} }{validate} ) {
+            local $_ = $value;
+            if ( ! $self->types->{ $self->{type} }{validate}->() ) {
+                warn $self->types->{ $self->{type} }{error};
+                return $self->edit;
+            }
+        }
         $self->value($value);
     }
 
