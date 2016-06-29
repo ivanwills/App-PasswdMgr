@@ -162,6 +162,19 @@ sub question {
     return '' . prompt(@args);
 }
 
+sub delete {
+    my ($self) = @_;
+
+    if ( keys %{ $self->contents } ) {
+        my $delete = prompt( -p => 'Really delete this and it\'s contents? [yn] ', '-yes' );
+        return $self->show if ! $delete;
+    }
+
+    delete $self->parent->contents->{$self->name};
+
+    return;
+}
+
 1;
 
 __END__

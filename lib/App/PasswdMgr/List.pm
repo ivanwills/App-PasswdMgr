@@ -64,19 +64,6 @@ sub new_password {
     return $self->_new( "New password's name: ", 'App::PasswdMgr::Password' );
 }
 
-sub delete {
-    my ($self) = @_;
-
-    if ( keys %{ $self->contents } ) {
-        my $delete = prompt( -p => 'Really delete? [yn] ', '-yes' );
-        return $self->show if ! $delete;
-    }
-
-    delete $self->parent->contents->{$self->name};
-
-    return;
-}
-
 1;
 
 __END__

@@ -34,6 +34,10 @@ sub actions {
             description => 'Rename',
             method      => 'rename',
         },
+        d => {
+            description => 'Delete',
+            method      => 'delete',
+        },
     };
 
     if ( $self->contents->{password} ) {

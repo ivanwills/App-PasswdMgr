@@ -55,6 +55,10 @@ sub actions {
             description => 'Rename group',
             method      => 'rename',
         },
+        d => {
+            description => 'Delete',
+            method      => 'delete',
+        },
     }
 }
 
