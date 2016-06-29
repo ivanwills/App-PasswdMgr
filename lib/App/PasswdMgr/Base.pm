@@ -86,12 +86,13 @@ sub menu {
     my ($self, %menu) = @_;
     my @ordered = sort {$a =~ /^\d+$/ && $b =~ /^\d+$/ ? $a <=> $b : $a cmp $b} keys %menu;
 
-    print $self->name && $self->full_name || "Select one :", "\n";
+    my $menu = ($self->name && $self->full_name || "Select one :") . "\n";
 
-    my $menu = '';
     for my $item (@ordered) {
         $menu .= sprintf "\t%2s  %s\n", $item, $menu{$item}{description};
     }
+
+    $menu =~ s/^(\s+[a-z])/\n$1/xms;
 
     return $menu;
 }
