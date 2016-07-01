@@ -159,6 +159,11 @@ sub question {
     return '' . prompt(@args);
 }
 
+sub pause {
+    my ($self, @args) = @_;
+    return $self->question(-p => "Press the any key to continue", '-one_char');
+}
+
 sub delete {
     my ($self) = @_;
 

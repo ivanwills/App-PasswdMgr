@@ -120,7 +120,7 @@ sub show_password {
 
     print $self->full_name . ":\n" . $self->contents->{password}->value . "\n";
 
-    $self->question(-p => "Press the any key to continue", '-one_char');
+    $self->pause;
 
     return $self->show;
 }

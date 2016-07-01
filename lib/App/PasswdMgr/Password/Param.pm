@@ -114,6 +114,7 @@ sub clipboard {
     }
     catch {
         warn "Couldn't copy to clipboard!\n";
+        $self->pause;
     };
 
     return $hide || $self->show;
