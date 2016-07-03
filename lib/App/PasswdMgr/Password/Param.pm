@@ -134,6 +134,10 @@ sub edit {
         }
         $self->value($value);
     }
+    else {
+        my $type = $self->type;
+        $self->$type();
+    }
 
     return $self;
 }
