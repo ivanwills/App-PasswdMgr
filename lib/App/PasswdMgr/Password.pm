@@ -103,7 +103,7 @@ sub enter_password {
     my ($self, $hide) = @_;
 
     if ( $self->contents->{password} ) {
-        $self->contents->{password}->set;
+        $self->contents->{password}->edit;
     }
     else {
         $self->contents->{password} = App::PasswdMgr::Password::Encrypted->new(
