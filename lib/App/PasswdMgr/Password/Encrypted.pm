@@ -86,6 +86,8 @@ sub show_password {
 
 sub generate {
     my ($self) = @_;
+
+    $self->value(int( rand 10000 ));
 }
 
 1;
