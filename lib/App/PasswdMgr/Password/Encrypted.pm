@@ -11,6 +11,10 @@ use warnings;
 use version;
 use Carp;
 use English qw/ -no_match_vars /;
+use String::MkPasswd qw/mkpasswd/;
+use Crypt::YAPassGen;
+use Crypt::RandPasswd;
+use Crypt::HSXKPasswd;
 
 extends 'App::PasswdMgr::Password::Param';
 
@@ -38,6 +42,10 @@ sub actions {
         r => {
             description => 'Rename group',
             method      => 'rename',
+        },
+        d => {
+            description => 'Delete',
+            method      => 'delete',
         },
     }
 }
@@ -79,7 +87,7 @@ sub show_password {
 
     print $self->full_name . ":\n" . $self->value . "\n";
 
-    $self->question(-p => "Press the any key to continue", '-one_char');
+    $self->pause;
 
     return $self->show;
 }
@@ -87,7 +95,24 @@ sub show_password {
 sub generate {
     my ($self) = @_;
 
-    $self->value(int( rand 10000 ));
+    my @passwd = (
+        hsxkpasswd(),
+        mkpasswd(-length => 12),
+        Crypt::YAPassGen->new(length => 12)->generate,
+        Crypt::RandPasswd->word(12,12),
+        Crypt::RandPasswd->chars(12,12),
+        mkpasswd(),
+        Crypt::YAPassGen->new->generate,
+        Crypt::RandPasswd->word(8,8),
+        Crypt::RandPasswd->chars(8,8),
+    );
+    my $value = $self->question(
+        -p => "Press the any key to continue",
+        -m => \@passwd,
+        '-one_char',
+    );
+
+    $self->value($value);
 }
 
 1;
