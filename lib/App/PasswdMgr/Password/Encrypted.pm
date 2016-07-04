@@ -16,27 +16,6 @@ extends 'App::PasswdMgr::Password::Param';
 
 our $VERSION = version->new('0.0.1');
 
-has '+types' => (
-    default => sub {{
-        generate => {
-            label => 'Auto generate',
-            type  => 'generate',
-        },
-        hand => {
-            label => 'Enter password',
-            type  => 'hand',
-        },
-    }},
-);
-has '+type_question' => (
-    default => 'Password type: ',
-);
-has '+value_question' => (
-    default => sub {return {
-        -p => 'Password: ',
-        -e => '*',
-    }},
-);
 
 sub actions {
     {
@@ -62,15 +41,37 @@ sub actions {
         },
     }
 }
+sub types {
+    return {
+        generate => {
+            label => 'Auto generate',
+            type  => 'generate',
+        },
+        hand => {
+            label => 'Enter password',
+            type  => 'hand',
+            enter => 'Value: ',
+        },
+    };
+}
+sub type_question { 'Password type: ' };
+sub value_question {
+    return {
+        -p => 'Password: ',
+        -e => '*',
+    };
+}
 
 sub suffix {
     my ($self) = @_;
-    return '(' . ( '*' x (length $self->value) ) . ')';
+    return '(' . ( '*' x (length $self->value || 0) ) . ')';
 }
 
-sub enter_value {
+sub enter_password {
     my ($self) = @_;
-    return $self->type eq 'hand';
+    $self->edit();
+
+    return $self->show;
 }
 
 sub show_password {
@@ -81,6 +82,10 @@ sub show_password {
     $self->question(-p => "Press the any key to continue", '-one_char');
 
     return $self->show;
+}
+
+sub generate {
+    my ($self) = @_;
 }
 
 1;

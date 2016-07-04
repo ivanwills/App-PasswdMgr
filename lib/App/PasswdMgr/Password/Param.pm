@@ -19,41 +19,6 @@ extends 'App::PasswdMgr::Base';
 our $VERSION = version->new('0.0.1');
 
 has [qw/value type/] => ( is => 'rw' );
-has types => (
-    is      => 'rw',
-    default => sub {{
-        username => {
-            label => 'Username',
-            type  => 'username',
-        },
-        key => {
-            label => 'Key',
-            type  => 'key',
-        },
-        number => {
-            label    => 'Number',
-            type     => 'number',
-            error    => "Not a valid number, please reenter\n",
-            validate => sub {
-                $_ =~ /^\d+$/;
-            },
-        },
-        other => {
-            label => 'Other',
-            type  => 'other',
-        },
-    }},
-);
-has type_question => (
-    is      => 'rw',
-    default => 'Parameter type: ',
-);
-has value_question => (
-    is      => 'rw',
-    default => sub {return {
-        -p => 'Value: ',
-    }},
-);
 
 sub actions {
     {
@@ -74,6 +39,40 @@ sub actions {
             method      => 'delete',
         },
     }
+}
+sub types {
+    return {
+        username => {
+            label => 'Username',
+            type  => 'username',
+            enter => 'Value: ',
+        },
+        key => {
+            label => 'Key',
+            type  => 'key',
+            enter => 'Value: ',
+        },
+        number => {
+            label    => 'Number',
+            type     => 'number',
+            error    => "Not a valid number, please reenter\n",
+            validate => sub {
+                $_ =~ /^\d+$/;
+            },
+            enter => 'Value: ',
+        },
+        other => {
+            label => 'Other',
+            type  => 'other',
+            enter => 'Value: ',
+        },
+    };
+}
+sub type_question { 'Parameter type: ' }
+sub value_question  {
+    return {
+        -p => 'Value: ',
+    };
 }
 
 sub set {
@@ -98,8 +97,6 @@ sub set {
     return $self->edit;
 }
 
-sub enter_value {1}
-
 sub suffix {
     my ($self) = @_;
 
@@ -123,7 +120,7 @@ sub clipboard {
 sub edit {
     my ($self) = @_;
 
-    if ($self->enter_value) {
+    if ($self->types->{$self->type}{enter}) {
         my $value = $self->question(%{ $self->value_question });
         if ( $self->types->{ $self->{type} }{validate} ) {
             local $_ = $value;
