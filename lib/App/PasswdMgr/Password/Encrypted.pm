@@ -152,6 +152,16 @@ Adds a '(*****)' to passwords
 
 Returns true if the password is to be a user entered value
 
+=head2 C<type_question ()>
+
+=head2 C<enter_password ()>
+
+=head2 C<show_password ()>
+
+=head2 C<generate ()>
+
+Generate a password for the user
+
 =head1 ATTRIBUTES
 
 =over 4

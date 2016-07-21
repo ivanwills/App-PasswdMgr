@@ -217,6 +217,12 @@ This documentation refers to App::PasswdMgr::Base version 0.0.1
 
 =head2 C<question ()>
 
+=head2 C<pause ()>
+
+Ask the user when to continue working.
+
+=head2 C<delete ()>
+
 =head1 ATTRIBUTES
 
 =over 4

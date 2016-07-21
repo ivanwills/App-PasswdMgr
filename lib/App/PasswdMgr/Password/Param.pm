@@ -184,6 +184,10 @@ Copy's the parameters value to the system clipboard.
 
 This method is used to allow the user to set/update the parameter
 
+=head2 C<type_question ()>
+
+=head2 C<edit ()>
+
 =head1 ATTRIBUTES
 
 =over 4
