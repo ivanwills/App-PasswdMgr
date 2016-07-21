@@ -154,6 +154,11 @@ This documentation refers to App::PasswdMgr::Password version 0.0.1
 
 Returns a hash ref of available actions for the current password.
 
+=head2 C<suffix ( $content )>
+
+Returns the suffix '(password)' if the item is a L<App::PasswdMgr::Password>
+item.
+
 =head2 C<edit ()>
 
 Change the name of the password
