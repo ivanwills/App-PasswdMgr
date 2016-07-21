@@ -151,7 +151,7 @@ Set up the decryption object
 
 =head2 C<create ()>
 
-Create a new passwordmgr file.
+Create a new passwdmgr file.
 
 =head1 ATTRIBUTES
 
@@ -163,7 +163,7 @@ The L<Crypt::CBC> object for encrypting the data.
 
 =item opt
 
-Command line optons.
+Command line options.
 
 =item data
 

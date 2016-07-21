@@ -103,7 +103,7 @@ Creates a new password item
 
 =head2 C<delete ()>
 
-Delets the current group from the parent list.
+Deletes the current group from the parent list.
 
 =head1 DIAGNOSTICS
 
