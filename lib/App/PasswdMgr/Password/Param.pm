@@ -11,7 +11,6 @@ use warnings;
 use version;
 use Carp;
 use English qw/ -no_match_vars /;
-use Clipboard;
 use Try::Tiny;
 
 extends 'App::PasswdMgr::Base';
@@ -107,6 +106,8 @@ sub clipboard {
     my ($self, $hide) = @_;
 
     try {
+        require Clipboard;
+        Clipboard->import;
         Clipboard->copy( $self->value );
     }
     catch {
