@@ -6,7 +6,6 @@ perl:
       - "5.20"
       - "5.18"
       - "5.16"
-      - "5.14"
 
 install:
      - export RELEASE_TESTING=1 AUTOMATED_TESTING=1 AUTHOR_TESTING=1 HARNESS_OPTIONS=c HARNESS_TIMER=1
