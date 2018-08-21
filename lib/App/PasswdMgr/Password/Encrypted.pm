@@ -96,15 +96,15 @@ sub generate {
     my ($self) = @_;
 
     my @passwd = (
-        hsxkpasswd(),
-        mkpasswd(-length => 12),
-        Crypt::YAPassGen->new(length => 12)->generate,
-        Crypt::RandPasswd->word(12,12),
-        Crypt::RandPasswd->chars(12,12),
-        mkpasswd(),
-        Crypt::YAPassGen->new->generate,
-        Crypt::RandPasswd->word(8,8),
-        Crypt::RandPasswd->chars(8,8),
+        eval { hsxkpasswd() } || (),
+        eval { mkpasswd(-length => 12) } || (),
+        eval { Crypt::YAPassGen->new(length => 12)->generate } || (),
+        eval { Crypt::RandPasswd->word(12,12) } || (),
+        eval { Crypt::RandPasswd->chars(12,12) } || (),
+        eval { mkpasswd() } || (),
+        eval { Crypt::YAPassGen->new->generate } || (),
+        eval { Crypt::RandPasswd->word(8,8) } || (),
+        eval { Crypt::RandPasswd->chars(8,8) } || (),
     );
     my $value = $self->question(
         -p => "Press the any key to continue",
