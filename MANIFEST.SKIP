@@ -74,3 +74,5 @@ errors.err
 .vtide.yml
 tmp*
 temp*
+.vtide/start.log
+MYMETA.json.lock
