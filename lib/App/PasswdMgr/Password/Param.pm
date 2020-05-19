@@ -134,7 +134,12 @@ sub edit {
     }
     else {
         my $type = $self->type;
-        $self->$type();
+        if ( $self->can($type) ) {
+            $self->$type();
+        }
+        else {
+            warn "Don't know what to do\n";
+        }
     }
 
     return $self;
